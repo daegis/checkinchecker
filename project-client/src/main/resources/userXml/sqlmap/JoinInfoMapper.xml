@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="JoinInfoMapper">
+    <resultMap id="BaseResultMap" type="cn.aegisa.project.model.JoinInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="cid" property="cid" jdbcType="INTEGER"/>
+        <result column="aid" property="aid" jdbcType="INTEGER"/>
+        <result column="is_leader" property="isLeader" jdbcType="INTEGER"/>
+        <result column="join_date" property="joinDate" jdbcType="TIMESTAMP"/>
+        <result column="join_comment" property="joinComment" jdbcType="VARCHAR"/>
+        <result column="pay_method" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="prepay" property="prepay" jdbcType="INTEGER"/>
+        <result column="discount" property="discount" jdbcType="INTEGER"/>
+        <result column="bus_seat" property="busSeat" jdbcType="INTEGER"/>
+        <result column="table_seat" property="tableSeat" jdbcType="INTEGER"/>
+        <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Where">
+        <if test="id != null">and id= #{id}</if>
+        <if test="cid != null">and cid= #{cid}</if>
+        <if test="aid != null">and aid= #{aid}</if>
+        <if test="isLeader != null">and is_leader= #{isLeader}</if>
+        <if test="joinDate != null">and join_date= #{joinDate}</if>
+        <if test="joinComment != null and joinComment !=''">and join_comment= #{joinComment}</if>
+        <if test="payMethod != null and payMethod !=''">and pay_method= #{payMethod}</if>
+        <if test="prepay != null">and prepay= #{prepay}</if>
+        <if test="discount != null">and discount= #{discount}</if>
+        <if test="busSeat != null">and bus_seat= #{busSeat}</if>
+        <if test="tableSeat != null">and table_seat= #{tableSeat}</if>
+        <if test="lastModifyTime != null">and last_modify_time= #{lastModifyTime}</if>
+    </sql>
+    <sql id="Base_Column_List">
+		id ,
+		cid ,
+		aid ,
+		is_leader ,
+		join_date ,
+		join_comment ,
+		pay_method ,
+		prepay ,
+		discount ,
+		bus_seat ,
+		table_seat ,
+		last_modify_time 
+	</sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from join_info
+        where
+        id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from join_info
+		where
+		id = #{id,jdbcType=INTEGER}
+	</delete>
+
+    <insert id="insertSelective" parameterType="cn.aegisa.project.model.JoinInfo">
+        insert into join_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="cid != null">cid,</if>
+            <if test="aid != null">aid,</if>
+            <if test="isLeader != null">is_leader,</if>
+            <if test="joinDate != null">join_date,</if>
+            <if test="joinComment != null and joinComment !=''">join_comment,</if>
+            <if test="payMethod != null and payMethod !=''">pay_method,</if>
+            <if test="prepay != null">prepay,</if>
+            <if test="discount != null">discount,</if>
+            <if test="busSeat != null">bus_seat,</if>
+            <if test="tableSeat != null">table_seat,</if>
+            <if test="lastModifyTime != null">last_modify_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="cid != null">
+                #{cid,jdbcType=INTEGER},
+            </if>
+            <if test="aid != null">
+                #{aid,jdbcType=INTEGER},
+            </if>
+            <if test="isLeader != null">
+                #{isLeader,jdbcType=INTEGER},
+            </if>
+            <if test="joinDate != null">
+                #{joinDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="joinComment != null and joinComment !=''">
+                #{joinComment,jdbcType=VARCHAR},
+            </if>
+            <if test="payMethod != null and payMethod !=''">
+                #{payMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="prepay != null">
+                #{prepay,jdbcType=INTEGER},
+            </if>
+            <if test="discount != null">
+                #{discount,jdbcType=INTEGER},
+            </if>
+            <if test="busSeat != null">
+                #{busSeat,jdbcType=INTEGER},
+            </if>
+            <if test="tableSeat != null">
+                #{tableSeat,jdbcType=INTEGER},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.aegisa.project.model.JoinInfo">
+        update join_info
+        <set>
+            <if test="cid != null">
+                cid= #{cid,jdbcType=INTEGER},
+            </if>
+            <if test="aid != null">
+                aid= #{aid,jdbcType=INTEGER},
+            </if>
+            <if test="isLeader != null">
+                is_leader= #{isLeader,jdbcType=INTEGER},
+            </if>
+            <if test="joinDate != null">
+                join_date= #{joinDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="joinComment != null and joinComment !=''">
+                join_comment= #{joinComment,jdbcType=VARCHAR},
+            </if>
+            <if test="payMethod != null and payMethod !=''">
+                pay_method= #{payMethod,jdbcType=VARCHAR},
+            </if>
+            <if test="prepay != null">
+                prepay= #{prepay,jdbcType=INTEGER},
+            </if>
+            <if test="discount != null">
+                discount= #{discount,jdbcType=INTEGER},
+            </if>
+            <if test="busSeat != null">
+                bus_seat= #{busSeat,jdbcType=INTEGER},
+            </if>
+            <if test="tableSeat != null">
+                table_seat= #{tableSeat,jdbcType=INTEGER},
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time= #{lastModifyTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getAll" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from join_info where 1=1
+        <include refid="Base_Where"/>
+    </select>
+    <select id="pageCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from join_info where 1=1
+        <include refid="Base_Where"/>
+    </select>
+    <select id="pageData" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from join_info where 1=1
+        <include refid="Base_Where"/>
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from join_info where id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryCustomerCountInActivity" resultType="int" parameterType="map">
+        SELECT
+        count(1)
+        FROM
+        join_info
+        WHERE
+        aid=#{aid}
+    </select>
+
+    <select id="queryCountOfJoin" resultType="int" parameterType="map">
+        SELECT
+        count(1)
+        FROM
+        join_info
+        WHERE
+        aid=#{aid}
+        AND
+        cid=#{cid}
+    </select>
+
+    <update id="removeBusSeat" parameterType="map">
+        UPDATE join_info
+        SET
+        bus_seat = NULL
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="deleteComment" parameterType="map">
+        UPDATE join_info
+        SET
+        join_comment = NULL
+        WHERE
+        id = #{id}
+    </update>
+
+</mapper>

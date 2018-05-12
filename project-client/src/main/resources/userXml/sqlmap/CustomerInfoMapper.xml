@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CustomerInfoMapper">
+    <resultMap id="BaseResultMap" type="cn.aegisa.project.model.CustomerInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="id_number" property="idNumber" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+        <result column="comment" property="comment" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Where">
+        <if test="id != null">and id= #{id}</if>
+        <if test="nickname != null and nickname !=''">and nickname= #{nickname}</if>
+        <if test="realName != null and realName !=''">and real_name= #{realName}</if>
+        <if test="idNumber != null and idNumber !=''">and id_number= #{idNumber}</if>
+        <if test="telephone != null and telephone !=''">and telephone= #{telephone}</if>
+        <if test="lastModifyTime != null">and last_modify_time= #{lastModifyTime}</if>
+        <if test="comment != null and comment !=''">and comment= #{comment}</if>
+        <if test="address != null and address !=''">and address= #{address}</if>
+    </sql>
+    <sql id="Base_Like">
+        <if test="keyword != null and keyword!=''">
+            AND concat_ws(',',
+            nickname ,
+            real_name ,
+            id_number ,
+            telephone ,
+            comment ,
+            address) LIKE '%${keyword}%'
+        </if>
+        <if test="desc != null and desc!=''">
+            ORDER BY id DESC
+        </if>
+    </sql>
+    <sql id="Base_Column_List">
+        id ,
+        nickname ,
+        real_name ,
+        id_number ,
+        telephone ,
+        last_modify_time ,
+        comment ,
+        address
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_info
+        where
+        id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from customer_info
+        where
+        id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insertSelective" parameterType="cn.aegisa.project.model.CustomerInfo">
+        insert into customer_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="nickname != null and nickname !=''">nickname,</if>
+            <if test="realName != null and realName !=''">real_name,</if>
+            <if test="idNumber != null and idNumber !=''">id_number,</if>
+            <if test="telephone != null and telephone !=''">telephone,</if>
+            <if test="lastModifyTime != null">last_modify_time,</if>
+            <if test="comment != null and comment !=''">comment,</if>
+            <if test="address != null and address !=''">address,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="nickname != null and nickname !=''">
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null and realName !=''">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idNumber != null and idNumber !=''">
+                #{idNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null and telephone !=''">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifyTime != null">
+                #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comment != null and comment !=''">
+                #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null and address !=''">
+                #{address,jdbcType=VARCHAR},
+            </if>
+
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.aegisa.project.model.CustomerInfo">
+        update customer_info
+        <set>
+            <if test="nickname != null and nickname !=''">
+                nickname= #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null and realName !=''">
+                real_name= #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idNumber != null and idNumber !=''">
+                id_number= #{idNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null and telephone !=''">
+                telephone= #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="lastModifyTime != null">
+                last_modify_time= #{lastModifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comment != null and comment !=''">
+                comment= #{comment,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null and address !=''">
+                address= #{address,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where
+        id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getAll" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_info where 1=1
+        <include refid="Base_Where"/>
+    </select>
+    <select id="pageCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from customer_info where 1=1
+        <include refid="Base_Where"/>
+    </select>
+    <select id="pageData" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_info where 1=1
+        <include refid="Base_Where"/>
+    </select>
+
+    <select id="selectByIds" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_info where id in
+        <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="queryCount" resultType="java.lang.Integer" parameterType="map">
+        select count(1) from customer_info where 1=1
+        <include refid="Base_Like"/>
+    </select>
+    <select id="queryData" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_info where 1=1
+        <include refid="Base_Like"/>
+        limit #{start},#{limit}
+    </select>
+
+    <select id="getHistoryActivity" resultType="java.lang.String" parameterType="map">
+        SELECT
+        ainfo.activity_name
+        FROM
+        activity_info ainfo
+        WHERE
+        ainfo.id
+        IN (
+          SELECT
+          jinfo.aid
+          FROM
+          join_info jinfo
+          WHERE
+          jinfo.cid = #{cid}
+        )
+    </select>
+
+</mapper>

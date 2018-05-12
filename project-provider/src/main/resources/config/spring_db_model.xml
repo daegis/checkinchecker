@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/jee  http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd"
+	default-lazy-init="true">
+	
+    <!-- 配置内容数据库开始 -->
+	<!-- 配置内容主库数据源 -->
+	<bean id="model_master_dataSource" parent="parentDataSource">
+		<property name="jdbcUrl">
+			<value>${model.master.jdbc.url}</value>
+		</property>
+		<property name="user">
+			<value>${model.master.jdbc.username}</value>
+		</property>
+		<property name="password">
+			<value>${model.master.jdbc.password}</value>
+		</property>
+	</bean>
+
+	<!-- 配置内容从库数据源 -->
+	<bean id="model_slave_dataSource" parent="parentDataSource">
+		<property name="jdbcUrl">
+			<value>${model.slave.jdbc.url}</value>
+		</property>
+		<property name="user">
+			<value>${model.slave.jdbc.username}</value>
+		</property>
+		<property name="password">
+			<value>${model.slave.jdbc.password}</value>
+		</property>
+	</bean>
+	
+	<!-- 配置内容查询数据库 -->
+	<bean id="model_slave_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="model_slave_dataSource" />
+		<property name="configLocation" value="classpath:/userXml/sql-map-config.xml" />
+		<property name="mapperLocations" value="classpath:/userXml/sqlmap/*.xml" />
+	</bean>
+	
+	<bean id="contentJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="model_master_dataSource"/>
+    </bean>
+    
+    <bean id="contentJdbcQueryTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="model_slave_dataSource"/>
+    </bean>
+	
+ 	<bean id="contentTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="model_master_dataSource" />
+	</bean>  
+
+	<tx:annotation-driven transaction-manager="contentTransactionManager" />
+	<!-- 配置内容事物数据库 -->
+	<bean id="model_master_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="model_master_dataSource" />
+		<property name="configLocation" value="classpath:/userXml/sql-map-config.xml" />
+		<property name="mapperLocations" value="classpath:/userXml/sqlmap/*.xml" />
+	</bean>
+
+	<bean id="model_master_sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="model_master_sqlSessionFactory" />
+	</bean>
+	
+	<bean id="model_slave_sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="model_slave_sqlSessionFactory" />
+	</bean>
+	<!-- 配置相应的Dao 和Service-->
+	<bean id ="modelCommonDao"  class="cn.aegisa.project.dao.spi.impl.CommonDaoImpl">
+		<property name="sqlSession" ref="model_master_sqlSession" />
+		<property name="sqlSessionQurey" ref="model_slave_sqlSession" />
+	</bean>
+
+	<bean id ="modelCommonService"  class="cn.aegisa.project.dao.service.impl.CommonServiceImpl">
+		<property name="commonDao" ref="modelCommonDao" />
+	</bean>
+    <!-- 配置内容数据库结束 -->
+</beans>

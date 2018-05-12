@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ActivityInfoMapper">
+	<resultMap id="BaseResultMap" type="cn.aegisa.project.model.ActivityInfo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+		<result column="activity_date" property="activityDate" jdbcType="TIMESTAMP" />
+		<result column="day_count" property="dayCount" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Where">
+		<if test="id != null"> and id= #{id}</if>	
+		<if test="activityName != null and activityName !=''"> and activity_name= #{activityName}</if>
+		<if test="activityDate != null"> and activity_date= #{activityDate}</if>	
+		<if test="dayCount != null"> and day_count= #{dayCount}</if>	
+		<if test="price != null"> and price= #{price}</if>	
+		<if test="createTime != null"> and create_time= #{createTime}</if>	
+	</sql>
+	<sql id="Base_Column_List">
+		id ,
+		activity_name ,
+		activity_date ,
+		day_count ,
+		price ,
+		create_time 
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from activity_info
+		where
+		id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from activity_info
+		where
+		id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="insertSelective" parameterType="cn.aegisa.project.model.ActivityInfo">
+		insert into activity_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>	
+			<if test="activityName != null and activityName !=''">activity_name,</if>
+			<if test="activityDate != null">activity_date,</if>	
+			<if test="dayCount != null">day_count,</if>	
+			<if test="price != null">price,</if>	
+			<if test="createTime != null">create_time,</if>	
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="activityName != null and activityName !=''">
+				#{activityName,jdbcType=VARCHAR},
+			</if>
+			<if test="activityDate != null">
+				#{activityDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dayCount != null">
+				#{dayCount,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="cn.aegisa.project.model.ActivityInfo">
+		update activity_info
+		<set>
+			<if test="activityName != null and activityName !=''">
+				activity_name= #{activityName,jdbcType=VARCHAR},
+			</if>
+			<if test="activityDate != null">
+				activity_date= #{activityDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dayCount != null">
+				day_count= #{dayCount,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				price= #{price,jdbcType=INTEGER},
+			</if>
+			<if test="createTime != null">
+				create_time= #{createTime,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where
+		id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="getAll" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from activity_info where 1=1
+		<include refid="Base_Where" />
+	</select>
+	<select id="pageCount" resultType="java.lang.Integer" parameterType="map">
+		select count(1) from activity_info where 1=1
+		<include refid="Base_Where" />
+	</select>
+	<select id="pageData" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from activity_info where 1=1
+		<include refid="Base_Where" />
+	</select>
+
+	<select id="selectByIds" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from activity_info where id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+    <select id="selectWhereCustomerNotIn" resultMap="BaseResultMap" parameterType="map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM activity_info info
+        WHERE info.id NOT IN(
+        SELECT
+        j.aid
+        FROM
+        join_info j
+        WHERE
+        j.cid = #{cid}
+        )
+    </select>
+
+</mapper>

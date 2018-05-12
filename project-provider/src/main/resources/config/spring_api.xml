@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	 http://code.alibabatech.com/schema/dubbo	http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+       default-lazy-init="false" default-autowire="byName">
+
+    <description>Dubbo provider配置</description>
+    <dubbo:provider timeout="10000" payload="50000000"/>
+    <dubbo:protocol name="dubbo" port="20880" dispather="all" threadpool="cached" threads="5000"/>
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1" register="false"/>
+    <dubbo:consumer check="false" timeout="3000"/>
+
+
+</beans>
