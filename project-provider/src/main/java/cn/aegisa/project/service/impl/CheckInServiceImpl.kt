@@ -49,6 +49,7 @@ class CheckInServiceImpl : CheckInService {
                 monday.plusDays(3L),
                 monday.plusDays(4L))
         val resultMap: MutableMap<String, Any> = hashMapOf()
+        val finalMap: MutableMap<String, Any> = hashMapOf()
         var secondCount = 0L
         for (day in dayList) {
             val valueMap: MutableMap<String, Any> = hashMapOf()
@@ -76,21 +77,32 @@ class CheckInServiceImpl : CheckInService {
                     val lastTimeString = LocalDateTimeUtil.timeToString(lastTime)
                     valueMap["last"] = lastTimeString
                     val between = Duration.between(lastTime, first).abs()
-                    var seconds = between.seconds
+                    val seconds = between.seconds
                     secondCount += seconds
-                    val hours = seconds / 3600
-                    seconds -= hours * 3600
-                    val minutes = seconds / 60
-                    seconds -= minutes * 60
-                    valueMap["period"] = "${hours}小时${minutes}分钟${seconds}秒"
+                    valueMap["period"] = getTime(seconds)
                 }
-
             }
             resultMap[dayStr!!] = valueMap
         }
-
-
-        return resultMap
+        val totalTimeOfWeek = getTime(secondCount)
+        finalMap["total"] = totalTimeOfWeek
+        finalMap["days"] = resultMap
+        var count = 0
+        for (entry in resultMap.entries) {
+            val value = entry.value as HashMap<*, *>
+            val period = value["period"]
+            if (period != null && period != "--") {
+                count++
+            }
+        }
+        if (count != 0) {
+            val avg = secondCount / count
+            val avgTime = getTime(avg)
+            finalMap["average"] = avgTime
+        } else {
+            finalMap["average"] = "--"
+        }
+        return finalMap
     }
 
     override fun doSign(type: String?) {
@@ -115,5 +127,14 @@ class CheckInServiceImpl : CheckInService {
             }
         }
         return result
+    }
+
+    fun getTime(second: Long): String {
+        var seconds = second
+        val hours = seconds / 3600
+        seconds -= hours * 3600
+        val minutes = seconds / 60
+        seconds -= minutes * 60
+        return "${hours}小时${minutes}分钟${seconds}秒"
     }
 }
