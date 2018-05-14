@@ -26,7 +26,7 @@ class KotlinController {
 
     @RequestMapping(value = ["/main"])
     fun mainPage(model: Model): String {
-        var map = checkInService.getInfo()
+        val map = checkInService.getInfo()
         log.info("返回给前端的数据：{}", JSON.toJSONString(map))
         model.addAttribute("info", "map")
         return "main"

@@ -49,6 +49,7 @@ class CheckInServiceImpl : CheckInService {
                 monday.plusDays(3L),
                 monday.plusDays(4L))
         val resultMap: MutableMap<String, Any> = hashMapOf()
+        var secondCount = 0L
         for (day in dayList) {
             val valueMap: MutableMap<String, Any> = hashMapOf()
             val start = day.atStartOfDay()
@@ -76,6 +77,7 @@ class CheckInServiceImpl : CheckInService {
                     valueMap["last"] = lastTimeString
                     val between = Duration.between(lastTime, first).abs()
                     var seconds = between.seconds
+                    secondCount += seconds
                     val hours = seconds / 3600
                     seconds -= hours * 3600
                     val minutes = seconds / 60
