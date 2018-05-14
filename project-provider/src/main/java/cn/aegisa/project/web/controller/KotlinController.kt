@@ -28,7 +28,7 @@ class KotlinController {
     fun mainPage(model: Model): String {
         val map = checkInService.getInfo()
         log.info("返回给前端的数据：{}", JSON.toJSONString(map))
-        model.addAttribute("info", "map")
+        model.addAttribute("info", map)
         return "main"
     }
 

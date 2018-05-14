@@ -48,11 +48,11 @@ class CheckInServiceImpl : CheckInService {
                 monday.plusDays(2L),
                 monday.plusDays(3L),
                 monday.plusDays(4L))
-        val resultMap: MutableMap<String, Any> = hashMapOf()
-        val finalMap: MutableMap<String, Any> = hashMapOf()
+        val resultMap: MutableMap<String, Any> = linkedMapOf()
+        val finalMap: MutableMap<String, Any> = linkedMapOf()
         var secondCount = 0L
         for (day in dayList) {
-            val valueMap: MutableMap<String, Any> = hashMapOf()
+            val valueMap: MutableMap<String, Any> = linkedMapOf()
             val start = day.atStartOfDay()
             val end = day.plusDays(1L).atStartOfDay()
             var dayCollection = getDayCollection(start, end, timeList)
@@ -119,7 +119,7 @@ class CheckInServiceImpl : CheckInService {
         commonService.save(user)
     }
 
-    fun getDayCollection(start: LocalDateTime, end: LocalDateTime, list: List<LocalDateTime>): List<LocalDateTime> {
+    private fun getDayCollection(start: LocalDateTime, end: LocalDateTime, list: List<LocalDateTime>): List<LocalDateTime> {
         val result: MutableList<LocalDateTime> = arrayListOf()
         for (localDateTime in list) {
             if (localDateTime.isAfter(start) && localDateTime.isBefore(end)) {
@@ -129,7 +129,7 @@ class CheckInServiceImpl : CheckInService {
         return result
     }
 
-    fun getTime(second: Long): String {
+    private fun getTime(second: Long): String {
         var seconds = second
         val hours = seconds / 3600
         seconds -= hours * 3600
