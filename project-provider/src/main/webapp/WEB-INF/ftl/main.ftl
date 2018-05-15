@@ -19,7 +19,8 @@
     <div class="layui-form-item" pane>
         <label class="layui-form-label">输入密钥</label>
         <div class="layui-input-block">
-            <input id="typeInput" type="password" name="type" autocomplete="off" placeholder="不要乱给我写！" class="layui-input">
+            <input id="typeInput" type="password" name="type" autocomplete="off" placeholder="不要乱给我写！"
+                   class="layui-input">
         </div>
     </div>
 </form>
@@ -54,10 +55,14 @@
     <li class="layui-timeline-item">
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
         <div class="layui-timeline-content layui-text">
-            <div class="layui-timeline-title">过去</div>
+            <h3 class="layui-timeline-title">未来</h3>
         </div>
     </li>
 </ul>
+<hr class="layui-bg-green">
+<p style="margin-bottom: 20px;text-align: center">
+    <a href="http://www.miitbeian.gov.cn/"><span style="font-size: 16px">辽ICP备17016924-2号</span></a>
+</p>
 <script>
     layui.use(['form', 'jquery', 'laydate'], function () {
         var form = layui.form
