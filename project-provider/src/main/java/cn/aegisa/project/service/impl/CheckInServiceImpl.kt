@@ -4,6 +4,7 @@ import cn.aegisa.project.dao.service.ICommonService
 import cn.aegisa.project.model.User
 import cn.aegisa.project.service.CheckInService
 import cn.aegisa.project.utils.LocalDateTimeUtil
+import com.Ostermiller.util.MD5
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -110,7 +111,8 @@ class CheckInServiceImpl : CheckInService {
         if (type == null) {
             throw RuntimeException("没有密钥")
         }
-        if (uu.password != type) {
+        val hashString = MD5.getHashString(MD5.getHashString(type))
+        if (uu.password != hashString) {
             throw RuntimeException("密钥不匹配")
         }
         val user = User()

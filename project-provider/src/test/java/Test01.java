@@ -1,3 +1,4 @@
+import com.Ostermiller.util.MD5;
 import org.junit.Test;
 
 /**
@@ -8,7 +9,8 @@ import org.junit.Test;
 public class Test01 {
 
     @Test
-    public void test01(){
-        System.out.println(123);
+    public void test01() {
+        String hashString = MD5.getHashString(MD5.getHashString("cool"));
+        System.out.println(hashString);
     }
 }
